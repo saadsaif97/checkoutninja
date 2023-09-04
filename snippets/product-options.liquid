@@ -1,0 +1,33 @@
+{%- for option in product.metafields.options -%}
+  {% assign name = option[0] %}
+  {% assign values = option[1] | remove: '[' | remove: ']' | remove: '"' | split: ","   %}
+  <div class="product-form__input product-form__input--dropdown">
+    <label class="form__label" for="option-{{ name }}">
+      {{ name }}
+    </label>
+    <div class="select">
+      <select
+        id="option-{{ name }}"
+        class="select__select"
+        name="{{ name | escape }}"
+      >
+        {% for value in values %}
+          <option value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{%- endfor -%}
+
+
+<script>
+  document.querySelectorAll("select[id^='option-']").forEach(option => {
+    option.addEventListener('change', (e) => {
+      console.log(getSelectedHandle())
+    })
+  })
+  
+  function getSelectedHandle() {
+    return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
+  }
+</script>
