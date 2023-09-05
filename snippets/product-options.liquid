@@ -23,10 +23,13 @@
   (()=>{
   
     let selectedProduct = {};
+    let productId = {{ product.id }}
   
     document.querySelectorAll("select[id^='option-']").forEach(option => {
       option.addEventListener('change', async (e) => {
         let selectedHandle = getSelectedHandle()
+        productId = getProductIdFromHandle(selectedHandle)
+        updateAddToCartId()
         await fetchProduct(selectedHandle)
         
         // DOM update start
@@ -40,6 +43,10 @@
         console.log({selectedHandle, selectedProduct})
       })
     })
+    
+    function updateAddToCartId() {
+      document.querySelectorAll("form[action='/cart/add'] [name='id']").forEach(id => id.value = productId)
+    }
     
     function addLoader() {
       document.querySelector("[id^='MainProduct']")?.classList.add('loading')
@@ -153,7 +160,7 @@
     function getProductIdFromHandle(selectedHandle) {
       let products = [
         {%- for product in collections[product.metafields.family.collection].products -%} 
-          [ "{{ product.handle }}", {{ product.id }} ] {%- unless forloop.last -%},{%- endunless -%}
+          [ "{{ product.handle }}", {{ product.selected_or_first_available_variant.id }} ] {%- unless forloop.last -%},{%- endunless -%}
         {%- endfor -%}
       ];
       let foundHandle = products.find(([handle, id]) => handle == selectedHandle)
