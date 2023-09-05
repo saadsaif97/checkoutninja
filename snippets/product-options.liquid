@@ -27,12 +27,22 @@
     document.querySelectorAll("select[id^='option-']").forEach(option => {
       option.addEventListener('change', async (e) => {
         let selectedHandle = getSelectedHandle()
+        addLoader()
         await fetchProduct(selectedHandle)
         await renderTitle(selectedHandle)
         await renderPrice(selectedHandle)
+        removeLoader()
         console.log({selectedHandle, selectedProduct})
       })
     })
+    
+    function addLoader() {
+      document.querySelector("[id^='MainProduct']")?.classList.add('loading')
+    }
+    
+    function removeLoader() {
+      document.querySelector("[id^='MainProduct']")?.classList.remove('loading')
+    }
     
     function getSelectedHandle() {
       return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
@@ -101,3 +111,55 @@
     }
   })()
 </script>
+
+<style>
+  .loading {
+    position: relative;
+    opacity: .2;
+    transition: opacity .3s;
+  }
+  .loading:after, .loading:before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 3px;
+    background: #ffffff;
+    left: 50%;
+    top: 30%;
+    margin: -1px 0 0 -50px;
+    z-index: 4;
+    opacity: 0;
+  }
+  .loading:before {
+    background: #444444;
+    opacity: 1;
+  }
+  .loading:after {
+    opacity: 0;
+    animation: preloading .5s ease .3s infinite;
+  }
+  
+  @keyframes preloading {
+    0% {
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    40% {
+      transform-origin: 0 50%;
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    41% {
+      transform-origin: 100% 50%;
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    to {
+      transform-origin: 100% 50%;
+      transform: scaleX(0);
+      opacity: 1;
+    }
+  }
+
+</style>
