@@ -35,6 +35,7 @@
         await renderTitle(selectedHandle)
         await renderPrice(selectedHandle)
         await renderGallery(selectedHandle)
+        await renderProductMediaModal(selectedHandle)
         removeLoader()
         // DOM update end
         console.log({selectedHandle, selectedProduct})
@@ -64,9 +65,9 @@
         if (!response.ok) throw new Error(response.status);
 
         let text = await response.text();
-        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
         
-        const querySelector = ".product__title"
+        let querySelector = ".product__title"
         let titleContainer = document.querySelector(querySelector)
         if(!titleContainer) throw new Error(`title container is not correct ${querySelector}`)
         titleContainer.innerHTML = htmlMarkup
@@ -83,9 +84,9 @@
         if (!response.ok) throw new Error(response.status);
 
         let text = await response.text();
-        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-price').innerHTML;
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-price').innerHTML;
         
-        const querySelector = "[id^='price']"
+        let querySelector = "[id^='price']"
         let container = document.querySelector(querySelector)
         if(!container) throw new Error(`price container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
@@ -102,13 +103,35 @@
         if (!response.ok) throw new Error(response.status);
 
         let text = await response.text();
-        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-gallery').innerHTML;
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-gallery').innerHTML;
         
-        const querySelector = ".product__media-wrapper"
+        let querySelector = ".product__media-wrapper"
         let container = document.querySelector(querySelector)
         if(!container) throw new Error(`gallery container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
 
+      } catch (error) {
+        throw error;
+      }
+    }
+    
+    async function renderProductMediaModal(product_handle) {
+      try {
+      
+        let productId = getProductIdFromHandle(product_handle)
+        let productModal = document.querySelector(`[id='ProductModal-template--${productId}__main']`)
+        if(productModal) {
+          console.log("productModal already available: ", productModal)
+          return false
+        }
+      
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=product-media-modal`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-media-modal').innerHTML;
+        document.body.insertAdjacentHTML('beforeend', htmlMarkup)
       } catch (error) {
         throw error;
       }
