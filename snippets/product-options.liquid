@@ -27,9 +27,8 @@
     document.querySelectorAll("select[id^='option-']").forEach(option => {
       option.addEventListener('change', async (e) => {
         let selectedHandle = getSelectedHandle()
-        console.log({selectedHandle, productId})
         await fetchProduct(selectedHandle)
-        console.log({selectedProduct})
+        console.log({selectedHandle, selectedProduct})
       })
     })
     
