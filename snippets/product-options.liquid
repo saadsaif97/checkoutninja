@@ -27,11 +27,16 @@
     document.querySelectorAll("select[id^='option-']").forEach(option => {
       option.addEventListener('change', async (e) => {
         let selectedHandle = getSelectedHandle()
-        addLoader()
         await fetchProduct(selectedHandle)
+        
+        // DOM update start
+        addLoader()
+        updateUrl(selectedHandle)
         await renderTitle(selectedHandle)
         await renderPrice(selectedHandle)
+        await renderGallery(selectedHandle)
         removeLoader()
+        // DOM update end
         console.log({selectedHandle, selectedProduct})
       })
     })
@@ -42,6 +47,10 @@
     
     function removeLoader() {
       document.querySelector("[id^='MainProduct']")?.classList.remove('loading')
+    }
+    
+    function updateUrl(selectedHandle) {
+      history.pushState({}, null, `https://${window.Shopify.shop}/products/${selectedHandle}`)
     }
     
     function getSelectedHandle() {
@@ -59,7 +68,7 @@
         
         const querySelector = ".product__title"
         let titleContainer = document.querySelector(querySelector)
-        if(!titleContainer) throw new Error(`Title container is not correct ${querySelector}`)
+        if(!titleContainer) throw new Error(`title container is not correct ${querySelector}`)
         titleContainer.innerHTML = htmlMarkup
 
       } catch (error) {
@@ -78,7 +87,26 @@
         
         const querySelector = "[id^='price']"
         let container = document.querySelector(querySelector)
-        if(!container) throw new Error(`Price container is not correct ${querySelector}`)
+        if(!container) throw new Error(`price container is not correct ${querySelector}`)
+        container.innerHTML = htmlMarkup
+
+      } catch (error) {
+        throw error;
+      }
+    }
+    
+    async function renderGallery(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=product-gallery`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-gallery').innerHTML;
+        
+        const querySelector = ".product__media-wrapper"
+        let container = document.querySelector(querySelector)
+        if(!container) throw new Error(`gallery container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
 
       } catch (error) {
