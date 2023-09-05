@@ -25,50 +25,44 @@
 
 
 <script defer>
-  document.querySelectorAll("select[id^='option-']").forEach(option => {
-    option.addEventListener('change', (e) => {
-      let selectedHandle = getSelectedHandle()
-      let productId = getProductIdFromHandle(selectedHandle)
-      console.log({selectedHandle, productId})
+  (()=>{
+  
+    let selectedProduct = {};
+  
+    document.querySelectorAll("select[id^='option-']").forEach(option => {
+      option.addEventListener('change', async (e) => {
+        let selectedHandle = getSelectedHandle()
+        console.log({selectedHandle, productId})
+        await fetchProduct(selectedHandle)
+        console.log({selectedProduct})
+      })
     })
-  })
-  
-  function getSelectedHandle() {
-    return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
-  }
-  
-  function fetchProducts(query) {
-    let url = `https://${window.Shopify.shop}/admin/api/2021-07/products.json`;
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': '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'
+    
+    function getSelectedHandle() {
+      return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
+    }
+    
+    async function fetchProduct(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}.js`);
+        let product = await response.json();
+        selectedProduct = product;
+      } catch (err) {
+        console.error('error:' + err);
       }
-    };
+    }
 
-    fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      const products = data.products;
-      const searchTerm = query;
-      console.log({products})
-      const productsMatchingTitle = products.filter(product => product.title.toLowerCase() === searchTerm.toLowerCase());
+    
+    function getProductIdFromHandle(selectedHandle) {
+      let products = [
+        {%- for product in collections[product.metafields.family.collection].products -%} 
+          [ "{{ product.handle }}", {{ product.id }} ] {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ];
+      let foundHandle = products.find(([handle, id]) => handle == selectedHandle)
+      if(!foundHandle) throw new Error(`Handle does not match: "${selectedHandle}"`)
 
-      console.log(productsMatchingTitle);
-    })
-    .catch(err => console.error('error:' + err));
-  }
-  
-  function getProductIdFromHandle(selectedHandle) {
-    let products = [
-      {%- for product in collections[product.metafields.family.collection].products -%} 
-        [ "{{ product.handle }}", {{ product.id }} ] {%- unless forloop.last -%},{%- endunless -%}
-      {%- endfor -%}
-    ];
-    let foundHandle = products.find(([handle, id]) => handle == selectedHandle)
-    if(!foundHandle) throw new Error(`Handle does not match: "${selectedHandle}"`)
-
-    return foundHandle[1]
-  }
+      return foundHandle[1]
+    }
+  })()
 </script>
