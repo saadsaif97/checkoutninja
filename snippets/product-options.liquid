@@ -29,6 +29,7 @@
         let selectedHandle = getSelectedHandle()
         await fetchProduct(selectedHandle)
         await renderTitle(selectedHandle)
+        await renderPrice(selectedHandle)
         console.log({selectedHandle, selectedProduct})
       })
     })
@@ -44,12 +45,31 @@
         if (!response.ok) throw new Error(response.status);
 
         let text = await response.text();
-        const titleMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
+        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
         
-        const titleQuerySelector = ".product__title"
-        let titleContainer = document.querySelector(titleQuerySelector)
-        if(!titleContainer) throw new Error(`Title container is not correct ${titleQuerySelector}`)
-        titleContainer.innerHTML = titleMarkup
+        const querySelector = ".product__title"
+        let titleContainer = document.querySelector(querySelector)
+        if(!titleContainer) throw new Error(`Title container is not correct ${querySelector}`)
+        titleContainer.innerHTML = htmlMarkup
+
+      } catch (error) {
+        throw error;
+      }
+    }
+    
+    async function renderPrice(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=product-price`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        const htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-price').innerHTML;
+        
+        const querySelector = "[id^='price']"
+        let container = document.querySelector(querySelector)
+        if(!container) throw new Error(`Price container is not correct ${querySelector}`)
+        container.innerHTML = htmlMarkup
 
       } catch (error) {
         throw error;
