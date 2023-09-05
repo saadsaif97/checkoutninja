@@ -49,11 +49,11 @@
     }
     
     function addLoader() {
-      document.querySelector("[id^='MainProduct']")?.classList.add('loading')
+      document.querySelector("[id^='MainProduct']")?.classList.add('loader')
     }
     
     function removeLoader() {
-      document.querySelector("[id^='MainProduct']")?.classList.remove('loading')
+      document.querySelector("[id^='MainProduct']")?.classList.remove('loader')
     }
     
     function updateUrl(selectedHandle) {
@@ -172,14 +172,14 @@
 </script>
 
 <style>
-  .loading {
+  .loader {
     position: relative;
     opacity: .8;
     transition: opacity .3s;
     cursor: not-allowed;
     pointer-events: none;
   }
-  .loading:after, .loading:before {
+  .loader:after, .loader:before {
     content: "";
     position: absolute;
     width: 100px;
@@ -191,11 +191,11 @@
     z-index: 4;
     opacity: 0;
   }
-  .loading:before {
+  .loader:before {
     background: #444444;
     opacity: 1;
   }
-  .loading:after {
+  .loader:after {
     opacity: 0;
     animation: preloading .5s ease .3s infinite;
   }
