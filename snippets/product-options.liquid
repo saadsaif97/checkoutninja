@@ -28,6 +28,7 @@
       option.addEventListener('change', async (e) => {
         let selectedHandle = getSelectedHandle()
         await fetchProduct(selectedHandle)
+        await renderTitle(selectedHandle)
         console.log({selectedHandle, selectedProduct})
       })
     })
@@ -35,6 +36,26 @@
     function getSelectedHandle() {
       return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
     }
+    
+    async function renderTitle(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=product-title`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        const titleMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
+        
+        const titleQuerySelector = ".product__title"
+        let titleContainer = document.querySelector(titleQuerySelector)
+        if(!titleContainer) throw new Error(`Title container is not correct ${titleQuerySelector}`)
+        titleContainer.innerHTML = titleMarkup
+
+      } catch (error) {
+        throw error;
+      }
+    }
+
     
     async function fetchProduct(product_handle) {
       try {
