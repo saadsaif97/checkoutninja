@@ -1,2 +1,0 @@
-{% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
-{% render 'product-media-modal' variant_images: variant_images %}

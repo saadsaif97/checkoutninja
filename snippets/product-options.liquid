@@ -35,7 +35,6 @@
         await renderTitle(selectedHandle)
         await renderPrice(selectedHandle)
         await renderGallery(selectedHandle)
-        await renderProductMediaModal(selectedHandle)
         removeLoader()
         // DOM update end
         console.log({selectedHandle, selectedProduct})
@@ -105,11 +104,13 @@
         let text = await response.text();
         let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-gallery').innerHTML;
         
+        // remove previous product media modal
+        document.querySelector('product-modal')?.remove()
+        
         let querySelector = ".product__media-wrapper"
         let container = document.querySelector(querySelector)
         if(!container) throw new Error(`gallery container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
-
       } catch (error) {
         throw error;
       }
