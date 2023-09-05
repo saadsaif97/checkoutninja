@@ -24,25 +24,35 @@
   
     let selectedProduct = {};
     let productId = {{ product.id }}
+    
+    init()
   
-    document.querySelectorAll("select[id^='option-']").forEach(option => {
-      option.addEventListener('change', async (e) => {
-        let selectedHandle = getSelectedHandle()
-        productId = getProductIdFromHandle(selectedHandle)
-        updateAddToCartId()
-        await fetchProduct(selectedHandle)
-        
-        // DOM update start
-        addLoader()
-        updateUrl(selectedHandle)
-        await renderTitle(selectedHandle)
-        await renderPrice(selectedHandle)
-        await renderGallery(selectedHandle)
-        removeLoader()
-        // DOM update end
-        console.log({selectedHandle, selectedProduct})
+    function init() {
+      document.querySelectorAll("select[id^='option-']").forEach(option => {
+        option.addEventListener('change', async (e) => {
+          updatePDPWithSelectProductData()
+        })
       })
-    })
+      
+      updatePDPWithSelectProductData() 
+    }
+    
+    async function updatePDPWithSelectProductData() {
+      let selectedHandle = getSelectedHandle()
+      productId = getProductIdFromHandle(selectedHandle)
+      updateAddToCartId()
+      await fetchProduct(selectedHandle)
+      
+      // DOM update start
+      addLoader()
+      updateUrl(selectedHandle)
+      await renderTitle(selectedHandle)
+      await renderPrice(selectedHandle)
+      await renderGallery(selectedHandle)
+      removeLoader()
+      // DOM update end
+      console.log({selectedHandle, selectedProduct})
+    }
     
     function updateAddToCartId() {
       document.querySelectorAll("form[action='/cart/add'] [name='id']").forEach(id => id.value = productId)
