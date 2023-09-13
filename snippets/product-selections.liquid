@@ -29,17 +29,17 @@
     
     async function updatePDPWithSelectProductData() {
       let selectedHandle = getSelectedHandle()
-      //productId = getProductIdFromHandle(selectedHandle)
-      //updateAddToCartId()
-      //await fetchProduct(selectedHandle)
-      //
-      //// DOM update start
-      //addLoader()
-      //updateUrl(selectedHandle)
-      //await renderTitle(selectedHandle)
-      //await renderPrice(selectedHandle)
-      //await renderGallery(selectedHandle)
-      //removeLoader()
+      productId = getProductIdFromHandle(selectedHandle)
+      updateAddToCartId()
+      await fetchProduct(selectedHandle)
+      
+      // DOM update start
+      addLoader()
+      updateUrl(selectedHandle)
+      await renderTitle(selectedHandle)
+      await renderPrice(selectedHandle)
+      await renderGallery(selectedHandle)
+      removeLoader()
       // DOM update end
       console.log({selectedHandle})
     }
@@ -61,7 +61,8 @@
     }
     
     function getSelectedHandle() {
-      return Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
+      let joinedOptions = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
+      return `{{ product.handle }}-${joinedOptions}`
     }
     
     async function renderTitle(product_handle) {
