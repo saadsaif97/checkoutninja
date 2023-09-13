@@ -1,63 +1,78 @@
-<pre>
-  {{ product.metafields.variant.options }}
-  {{ product.metafields.variant.options.first }}
-</pre>
-
 {%- assign uid = 'product_' | append: product.id -%}
 
 <div id="{{ uid }}"></div>
 
+{{ 'starfiredirect.js' | asset_url | script_tag }}
 <script defer>
+  
   (()=>{
     let productOptions = [];
     productOptions = {{ product.metafields.variant.options }};
     console.log({productOptions})
     
-    // Sort options based on frontend sorting order
-    entries = Object.entries(productOptions).sort((a, b) => a[1].frontend_sorting - b[1].frontend_sorting);
-    // Convert the sorted array back to an object
-    const sortedProductOptions = Object.fromEntries(entries);
-    
-    // Render each option as a div structure
-    for (const category in sortedProductOptions) {
-      renderOptionDiv(category);
-    }
-    
-    // Function to slugify a string
+    let sortedProductOptions = sortOptionsBasedOnOrder(productOptions);
+
+    renderAllOptions(sortedProductOptions);
+
     function slugify(text) {
       return text.toLowerCase().replace(/ /g, "-");
     }
-    
-    function renderOptionDiv(category) {
+
+    function sortOptionsBasedOnOrder(options) {
+      // Sort options based on frontend sorting order
+      let entries = Object.entries(options).sort((a, b) => a[1].frontend_sorting - b[1].frontend_sorting);
+      // Convert the sorted array back to an object
+      return Object.fromEntries(entries);
+    }
+
+    function renderAllOptions(options) {
       const productOptionsDiv = document.getElementById("{{ uid }}");
 
-      const div = document.createElement("div");
+      for (const category in options) {
+        let divElement = createOptionDiv(category, options[category].options);
+        
+        // Add each option div to the parent container at once to minimize reflow
+        productOptionsDiv.appendChild(divElement);
+      }
+    }
+
+    function createOptionDiv(category, optionValues) {
+
+      let div = document.createElement("div");
       div.className = "product-form__input product-form__input--dropdown";
 
-      const label = document.createElement("label");
+      let label = document.createElement("label");
       label.className = "form__label";
       label.setAttribute("for", `option-${slugify(category)}`);
       label.textContent = category;
 
-      const selectDiv = document.createElement("div");
+      let selectDiv = document.createElement("div");
       selectDiv.className = "select";
 
-      const select = document.createElement("select");
+      let select = createSelectElement(category, optionValues);
+
+      selectDiv.appendChild(select);
+      div.appendChild(label);
+      div.appendChild(selectDiv);
+
+      return div;
+    }
+
+    function createSelectElement(category, optionValues) {
+        
+      let select = document.createElement("select");
       select.id = `option-${slugify(category)}`;
       select.className = "select__select";
-      select.name = category; // You may need to escape the option name if needed
+      select.name = category;
 
-      productOptions[category].options.forEach(value => {
-        const optionElement = document.createElement("option");
+      optionValues.forEach(value => {
+        let optionElement = document.createElement("option");
         optionElement.value = value;
         optionElement.textContent = value;
         select.appendChild(optionElement);
       });
 
-      selectDiv.appendChild(select);
-      div.appendChild(label);
-      div.appendChild(selectDiv);
-      productOptionsDiv.appendChild(div);
+      return select;
     }
     
     
@@ -257,18 +272,20 @@
       return foundHandle[1]
     }
   })()
+
 </script>
 
 <style>
   .loader {
     position: relative;
-    opacity: .8;
-    transition: opacity .3s;
+    opacity: 0.8;
+    transition: opacity 0.3s;
     cursor: not-allowed;
     pointer-events: none;
   }
-  .loader:after, .loader:before {
-    content: "";
+  .loader:after,
+  .loader:before {
+    content: '';
     position: absolute;
     width: 100px;
     height: 3px;
@@ -285,9 +302,9 @@
   }
   .loader:after {
     opacity: 0;
-    animation: preloading .5s ease .3s infinite;
+    animation: preloading 0.5s ease 0.3s infinite;
   }
-  
+
   @keyframes preloading {
     0% {
       transform-origin: 0 50%;
@@ -310,5 +327,4 @@
       opacity: 1;
     }
   }
-
 </style>
