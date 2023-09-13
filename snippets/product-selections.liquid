@@ -1,4 +1,4 @@
-{%- assign uid = 'product_' | append: product.id -%}
+{%- assign uid = 'product_options' | append: product.id -%}
 {%- assign product_options = product.metafields.variant.options -%}
 
 {% if product_options %}
@@ -18,7 +18,7 @@
     addEventListeners()
   
     function addEventListeners() {
-      document.querySelectorAll("select[id^='option-']").forEach(option => {
+      document.querySelectorAll("#{{ uid }} select[id^='option-']").forEach(option => {
         option.addEventListener('change', async (e) => {
           updatePDPWithSelectProductData()
         })
@@ -61,7 +61,7 @@
     }
     
     function getSelectedHandle() {
-      return Array.from(document.querySelectorAll("select[id^='option-']")).map(option => option.value).join("_")
+      return Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
     }
     
     async function renderTitle(product_handle) {
