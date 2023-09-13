@@ -7,7 +7,7 @@ class ProductOptions {
   }
 
   slugify(text) {
-    return text.toLowerCase().replace(/ /g, "-");
+    return text.toLowerCase().replace(/[^\w ]/g, "").replace(/ /g,"-");
   }
 
   sortOptions() {
@@ -56,7 +56,7 @@ class ProductOptions {
 
     optionValues.forEach((value) => {
       let optionElement = document.createElement("option");
-      optionElement.value = value;
+      optionElement.value = this.slugify(value);
       optionElement.textContent = value;
       select.appendChild(optionElement);
     });

@@ -24,24 +24,24 @@
         })
       })
       
-      updatePDPWithSelectProductData() 
+      //updatePDPWithSelectProductData() 
     }
     
     async function updatePDPWithSelectProductData() {
       let selectedHandle = getSelectedHandle()
-      productId = getProductIdFromHandle(selectedHandle)
-      updateAddToCartId()
-      await fetchProduct(selectedHandle)
-      
-      // DOM update start
-      addLoader()
-      updateUrl(selectedHandle)
-      await renderTitle(selectedHandle)
-      await renderPrice(selectedHandle)
-      await renderGallery(selectedHandle)
-      removeLoader()
+      //productId = getProductIdFromHandle(selectedHandle)
+      //updateAddToCartId()
+      //await fetchProduct(selectedHandle)
+      //
+      //// DOM update start
+      //addLoader()
+      //updateUrl(selectedHandle)
+      //await renderTitle(selectedHandle)
+      //await renderPrice(selectedHandle)
+      //await renderGallery(selectedHandle)
+      //removeLoader()
       // DOM update end
-      console.log({selectedHandle, selectedProduct})
+      console.log({selectedHandle})
     }
     
     function updateAddToCartId() {
