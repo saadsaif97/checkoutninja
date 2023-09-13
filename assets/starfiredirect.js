@@ -3,11 +3,15 @@ class ProductOptions {
     this.uid = uid;
     this.options = options;
     this.productOptionsDiv = document.getElementById(this.uid);
-    this.sortOptions()
+    this.sortOptions();
   }
 
   slugify(text) {
-    return text.toLowerCase().replace(/[^\w ]/g, "").replace(/ /g,"-");
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9_\-]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
   }
 
   sortOptions() {
