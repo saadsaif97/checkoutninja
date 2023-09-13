@@ -3,6 +3,7 @@ class ProductOptions {
     this.uid = uid;
     this.options = options;
     this.productOptionsDiv = document.getElementById(this.uid);
+    this.sortOptions()
   }
 
   slugify(text) {

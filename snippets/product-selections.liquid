@@ -1,126 +1,23 @@
 {%- assign uid = 'product_' | append: product.id -%}
+{%- assign product_options = product.metafields.variant.options -%}
 
+{% if product_options %}
 <div id="{{ uid }}"></div>
 
 {{ 'starfiredirect.js' | asset_url | script_tag }}
 <script defer>
   
   (()=>{
-    let productOptions = [];
-    productOptions = {{ product.metafields.variant.options }};
-    console.log({productOptions})
+    const productOptions = {{ product_options }};
+    if(!Object.keys(productOptions).length) return;
     
-    let sortedProductOptions = sortOptionsBasedOnOrder(productOptions);
-
-    renderAllOptions(sortedProductOptions);
-
-    function slugify(text) {
-      return text.toLowerCase().replace(/ /g, "-");
-    }
-
-    function sortOptionsBasedOnOrder(options) {
-      // Sort options based on frontend sorting order
-      let entries = Object.entries(options).sort((a, b) => a[1].frontend_sorting - b[1].frontend_sorting);
-      // Convert the sorted array back to an object
-      return Object.fromEntries(entries);
-    }
-
-    function renderAllOptions(options) {
-      const productOptionsDiv = document.getElementById("{{ uid }}");
-
-      for (const category in options) {
-        let divElement = createOptionDiv(category, options[category].options);
-        
-        // Add each option div to the parent container at once to minimize reflow
-        productOptionsDiv.appendChild(divElement);
-      }
-    }
-
-    function createOptionDiv(category, optionValues) {
-
-      let div = document.createElement("div");
-      div.className = "product-form__input product-form__input--dropdown";
-
-      let label = document.createElement("label");
-      label.className = "form__label";
-      label.setAttribute("for", `option-${slugify(category)}`);
-      label.textContent = category;
-
-      let selectDiv = document.createElement("div");
-      selectDiv.className = "select";
-
-      let select = createSelectElement(category, optionValues);
-
-      selectDiv.appendChild(select);
-      div.appendChild(label);
-      div.appendChild(selectDiv);
-
-      return div;
-    }
-
-    function createSelectElement(category, optionValues) {
-        
-      let select = document.createElement("select");
-      select.id = `option-${slugify(category)}`;
-      select.className = "select__select";
-      select.name = category;
-
-      optionValues.forEach(value => {
-        let optionElement = document.createElement("option");
-        optionElement.value = value;
-        optionElement.textContent = value;
-        select.appendChild(optionElement);
-      });
-
-      return select;
-    }
+    const productOptionsInstance = new ProductOptions("{{ uid }}", productOptions);
+    productOptionsInstance.renderAllOptions();
     
     
-    return
-    
-    // Function to render each category dropdown
-    function renderCategoryDropdown() {
-      const productOptionsDiv = document.getElementById("{{ uid }}");
-
-      // Sort categories based on frontend sorting order
-      const sortedCategories = Object.keys(productOptions).sort((a, b) => {
-        return productOptions[a].frontend_sorting - productOptions[b].frontend_sorting;
-      });
-
-      sortedCategories.forEach(category => {
-        const select = document.createElement("select");
-
-        // Sort options based on frontend sorting order
-        const sortedOptions = productOptions[category].options.sort((a, b) => {
-          return productOptions[category].frontend_sorting[a] - productOptions[category].frontend_sorting[b];
-        });
-
-        sortedOptions.forEach(option => {
-          const optionElement = document.createElement("option");
-          optionElement.value = slugify(option);
-          optionElement.text = option;
-          select.appendChild(optionElement);
-        });
-
-        productOptionsDiv.appendChild(select);
-      });
-    }
-
-    // Render each category dropdown
-    renderCategoryDropdown();
-    
-    return
-    
-    // check if the product metafields are available or not
-    const product_options_available = Object.keys({{ product.metafields.options | json }}).length
-    if(!product_options_available) return
+    addEventListeners()
   
-    let selectedProduct = {};
-    let productId = {{ product.id }}
-    
-    init()
-  
-    function init() {
+    function addEventListeners() {
       document.querySelectorAll("select[id^='option-']").forEach(option => {
         option.addEventListener('change', async (e) => {
           updatePDPWithSelectProductData()
@@ -328,3 +225,4 @@
     }
   }
 </style>
+{% endif %}
