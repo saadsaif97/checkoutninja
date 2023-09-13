@@ -1,3 +1,11 @@
+<pre>
+  {%- for option in product.metafields.product.selections.value -%}
+    {{ option.title }}
+  {%- endfor -%}
+  {{ product.metafields.product.selections.value | json }}
+</pre>
+
+
 {%- assign uid = 'product_options' | append: product.id -%}
 {%- assign product_options = product.metafields.variant.options -%}
 
