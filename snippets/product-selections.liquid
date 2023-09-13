@@ -159,11 +159,15 @@
 
     
     function getProductIdFromHandle(selectedHandle) {
-      let products = [
-        {%- for product in collections[product.metafields.family.collection].products -%} 
-          [ "{{ product.handle }}", {{ product.selected_or_first_available_variant.id }} ] {%- unless forloop.last -%},{%- endunless -%}
-        {%- endfor -%}
-      ];
+      {%- assign family_collection = collections[product.metafields.family.collection] -%}
+      {% paginate family_collection.products by 1000 %}
+        let products = [
+          {% for product in family_collection.products %}
+            [ "{{ product.handle }}", {{ product.selected_or_first_available_variant.id }} ] {%- unless forloop.last -%},{%- endunless -%}
+          {% endfor %}
+        ];
+      {% endpaginate %}
+      
       let foundHandle = products.find(([handle, id]) => handle == selectedHandle)
       if(!foundHandle) throw new Error(`Handle does not match: "${selectedHandle}"`)
 
