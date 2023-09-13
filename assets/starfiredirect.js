@@ -1,3 +1,43 @@
+/**
+ * DUMMY DATA
+{
+  "Size": {
+    "options": [
+      "36\"",
+      "45\""
+    ],
+    "frontend_sorting": 3,
+    "url_sorting": 1,
+    "label": "Size"
+  },
+  "Color": {
+    "options": [
+      "White",
+      "Natural Gray",
+      "Graphite",
+      "Brown",
+      "Beige"
+    ],
+    "frontend_sorting": 1,
+    "url_sorting": 3,
+    "label": "Color"
+  },
+  "Fuel & Ignition": {
+    "options": [
+      "Match Lit - NG/LP",
+      "PowerGlow Electronic - NG/LP",
+      "HPC CSA Certified Electronic On/Off - NG",
+      "HPC CSA Certified Electronic On/Off - LP",
+      "HPC CSA Certified Electronic High/Low - NG",
+      "HPC CSA Certified Electronic High/Low - LP"
+    ],
+    "frontend_sorting": 2,
+    "url_sorting": 2,
+    "label": "Fuel & Ignition"
+  }
+}
+ */
+
 class ProductOptions {
   constructor(uid, options) {
     this.uid = uid;
@@ -38,7 +78,7 @@ class ProductOptions {
     let label = document.createElement("label");
     label.className = "form__label";
     label.setAttribute("for", `option-${this.slugify(category)}`);
-    label.textContent = category;
+    label.textContent = this.sortedProductOptions[category].label;
 
     let selectDiv = document.createElement("div");
     selectDiv.className = "select";
@@ -57,7 +97,8 @@ class ProductOptions {
     select.id = `option-${this.slugify(category)}`;
     select.className = "select__select";
     select.name = category;
-    select.dataset.url_sorting = this.sortedProductOptions[category].url_sorting
+    select.dataset.url_sorting =
+      this.sortedProductOptions[category].url_sorting;
 
     optionValues.forEach((value) => {
       let optionElement = document.createElement("option");
