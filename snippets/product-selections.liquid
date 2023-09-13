@@ -1,26 +1,55 @@
-{%- for option in product.metafields.options -%}
-  {% assign name = option[0] %}
-  {% assign values = option[1] | remove: '[' | remove: ']' | remove: '"' | split: ","   %}
-  <div class="product-form__input product-form__input--dropdown">
-    <label class="form__label" for="option-{{ name }}">
-      {{ name }}
-    </label>
-    <div class="select">
-      <select
-        id="option-{{ name }}"
-        class="select__select"
-        name="{{ name | escape }}"
-      >
-        {% for value in values %}
-          <option value="{{ value }}">{{ value }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-{%- endfor -%}
+<pre>
+  {{ product.metafields.variant.options }}
+  {{ product.metafields.variant.options.first }}
+</pre>
+
+{%- assign uid = 'product_' | append: product.id -%}
+
+<div id="{{ uid }}"></div>
 
 <script defer>
   (()=>{
+    let productOptions = [];
+    productOptions = {{ product.metafields.variant.options }};
+    console.log({productOptions})
+    
+    // Function to slugify a string
+    function slugify(text) {
+      return text.toLowerCase().replace(/ /g, "-");
+    }
+    
+    // Function to render each category dropdown
+    function renderCategoryDropdown() {
+      const productOptionsDiv = document.getElementById("{{ uid }}");
+
+      // Sort categories based on frontend sorting order
+      const sortedCategories = Object.keys(productOptions).sort((a, b) => {
+        return productOptions[a].frontend_sorting - productOptions[b].frontend_sorting;
+      });
+
+      sortedCategories.forEach(category => {
+        const select = document.createElement("select");
+
+        // Sort options based on frontend sorting order
+        const sortedOptions = productOptions[category].options.sort((a, b) => {
+          return productOptions[category].frontend_sorting[a] - productOptions[category].frontend_sorting[b];
+        });
+
+        sortedOptions.forEach(option => {
+          const optionElement = document.createElement("option");
+          optionElement.value = slugify(option);
+          optionElement.text = option;
+          select.appendChild(optionElement);
+        });
+
+        productOptionsDiv.appendChild(select);
+      });
+    }
+
+    // Render each category dropdown
+    renderCategoryDropdown();
+    
+    return
     
     // check if the product metafields are available or not
     const product_options_available = Object.keys({{ product.metafields.options | json }}).length
