@@ -14,6 +14,10 @@
     const productOptionsInstance = new ProductOptions("{{ uid }}", productOptions);
     productOptionsInstance.renderAllOptions();
     
+    const sortedOptionsBasedOnProductUrlPosition = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).sort( (a, b) => { 
+      return parseInt(a.dataset.url_sorting) - parseInt(b.dataset.url_sorting) 
+    });
+    
     
     addEventListeners()
   
@@ -61,8 +65,8 @@
     }
     
     function getSelectedHandle() {
-      let joinedOptions = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
-      return `{{ product.handle }}-${joinedOptions}`
+      let values = sortedOptionsBasedOnProductUrlPosition.map(option => option.value).join("-")
+      return `{{ product.handle }}-${values}`
     }
     
     async function renderTitle(product_handle) {

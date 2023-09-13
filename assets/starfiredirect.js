@@ -57,6 +57,7 @@ class ProductOptions {
     select.id = `option-${this.slugify(category)}`;
     select.className = "select__select";
     select.name = category;
+    select.dataset.url_sorting = this.sortedProductOptions[category].url_sorting
 
     optionValues.forEach((value) => {
       let optionElement = document.createElement("option");
