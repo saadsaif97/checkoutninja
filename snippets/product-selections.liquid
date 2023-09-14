@@ -1,6 +1,8 @@
 {%- assign uid = 'product_options' | append: product.id -%}
+{%- assign options = product.metafields.product.selections.value | sort: 'frontend_sorting' -%}
 
-{%- for option in product.metafields.product.selections.value -%}
+{% if options %}
+{%- for option in options -%}
   <div id="{{ uid }}" class="product-form__input product-form__input--dropdown">
     <label class="form__label" for="option-{{ option.label }}">
       {{ option.label }}
@@ -20,10 +22,6 @@
   </div>
 {%- endfor -%}
 
-
-<div id="{{ uid }}"></div>
-
-{{ 'starfiredirect.js' | asset_url | script_tag }}
 <script defer>
   
   (()=>{
@@ -247,3 +245,4 @@
     }
   }
 </style>
+{% endif %}
