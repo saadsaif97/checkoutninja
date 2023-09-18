@@ -81,7 +81,7 @@ class ProductOptions {
 
     let label = document.createElement("label");
     label.className = "form__label";
-    label.setAttribute("for", `option-${this.slugify(category)}`);
+    label.setAttribute("for", `option-${this.slugify(this.sortedProductOptions[category].title)}`);
     label.textContent = this.sortedProductOptions[category].label;
 
     let selectDiv = document.createElement("div");
@@ -98,7 +98,7 @@ class ProductOptions {
 
   createSelectElement(category, optionValues) {
     let select = document.createElement("select");
-    select.id = `option-${this.slugify(category)}`;
+    select.id = `option-${this.slugify(this.sortedProductOptions[category].title)}`;
     select.className = "select__select";
     select.name = category;
     select.dataset.url_sorting =
