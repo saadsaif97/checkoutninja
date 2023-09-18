@@ -82,11 +82,12 @@ class ProductOptions {
     divElement.appendChild(titleElement);
     
     // Create radio buttons with image for each option
-    for (const option of options) {
+    options.forEach((option, index) => {
       let radioButton = document.createElement("input");
       radioButton.type = "radio";
       radioButton.name = title;
-      radioButton.value = option.value;
+      radioButton.value = this.slugify(option.value);
+      if (index == 0) { radioButton.setAttribute('checked', true) }
   
       let labelElement = document.createElement("label");
       labelElement.textContent = option.value;
@@ -95,10 +96,11 @@ class ProductOptions {
       imgElement.src = option.imageUrl;
       imgElement.alt = option.value;
   
+      
+      labelElement.prepend(imgElement);
       labelElement.appendChild(radioButton);
-      labelElement.appendChild(imgElement);
       divElement.appendChild(labelElement);
-    }
+    })
   
     return divElement;
   }
