@@ -179,10 +179,17 @@
 </script>
 
 <script defer>
-  let acc = document.getElementsByClassName("accordion");
+  const accordions = document.querySelectorAll("{{ selector_id }} .accordion");
 
-  for (let accItem of acc) {
-    accItem.addEventListener("click", function() {
+  for (let accordion of accordions) {
+    accordion.addEventListener("click", function(e) {
+      
+      /* remove the active class from other accordians */
+      Array.from(accordions).filter(accordion => accordion.title !== e.target.title).forEach(accordion => {
+        accordion.classList.remove("active")
+        accordion.nextElementSibling.style.maxHeight = null
+      })
+    
       /* Toggle between adding and removing the "active" class */
       this.classList.toggle("active");
 
@@ -211,14 +218,14 @@
     transition: 0.4s;
   }
   {{ selector_id }} .accordion:after {
-    content: '\25BC'; /* Unicode character for "chevron down" */
-    font-size: 13px;
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 8px;
     color: #777;
     float: right;
     margin-left: 5px;
   }
   {{ selector_id }} .active:after {
-    content: '\25B2'; /* Unicode character for "chevron up" */
+    content: '\2796'; /* Unicode character for "minus" sign (-) */
   }
   /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
   {{ selector_id }} .active, .accordion:hover {

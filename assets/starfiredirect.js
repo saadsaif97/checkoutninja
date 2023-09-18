@@ -119,6 +119,7 @@ class ProductOptions {
 
     let label = document.createElement("label");
     label.classList = "accordion"
+    label.title = title
     
     label.innerHTML = `<small>${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span></small>`;
 
