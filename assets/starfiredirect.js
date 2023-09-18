@@ -121,7 +121,10 @@ class ProductOptions {
     label.classList = "accordion"
     label.title = title
     
-    label.innerHTML = `<small>${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span></small>`;
+    label.innerHTML = `
+      <small>${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span></small>
+      <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"></path></svg>
+    `;
 
     mainDiv.appendChild(label);
 

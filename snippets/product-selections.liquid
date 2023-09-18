@@ -210,22 +210,23 @@
     color: #444;
     cursor: pointer;
     padding: 18px;
-    display: block;
     width: 100%;
     text-align: left;
     border: none;
     outline: none;
     transition: 0.4s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  {{ selector_id }} .accordion:after {
-    content: '\02795'; /* Unicode character for "plus" sign (+) */
-    font-size: 8px;
-    color: #777;
-    float: right;
-    margin-left: 5px;
+  
+  {{ selector_id }} .accordion svg {
+    width: 12px;
+    height: 12px;
+    transition: all .1s ease-in;
   }
-  {{ selector_id }} .active:after {
-    content: '\2796'; /* Unicode character for "minus" sign (-) */
+  {{ selector_id }} .accordion.active svg {
+    transform: rotate(180deg);
   }
   /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
   {{ selector_id }} .active, .accordion:hover {
