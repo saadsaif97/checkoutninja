@@ -118,12 +118,14 @@ class ProductOptions {
     let mainDiv = document.createElement("div");
 
     let label = document.createElement("label");
+    label.classList = "accordion"
     
     label.innerHTML = `${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span>`;
 
     mainDiv.appendChild(label);
 
     let fieldset = document.createElement("fieldset");
+    fieldset.classList = "panel"
     fieldset.name = title;
 
     let legend = document.createElement("legend");
