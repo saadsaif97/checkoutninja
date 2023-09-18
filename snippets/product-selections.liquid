@@ -1,5 +1,5 @@
 {%- assign uid = 'product_options' | append: product.id -%}
-{%- assign product_options = product.metafields.variant.options -%}
+{%- assign product_options = product.collections.first.product.options -%}
 
 {% if product_options %}
 <div id="{{ uid }}"></div>
