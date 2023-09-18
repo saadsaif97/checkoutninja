@@ -68,33 +68,41 @@ class ProductOptions {
   renderAllOptions() {
     for (const category in this.sortedProductOptions) {
       let divElement = this.createOptionDiv(
-        category,
+        this.sortedProductOptions[category].title,
         this.sortedProductOptions[category].options
       );
       this.productOptionsDiv.appendChild(divElement);
     }
   }
 
-  createOptionDiv(category, optionValues) {
-    let div = document.createElement("div");
-    div.className = "product-form__input product-form__input--dropdown";
-
-    let label = document.createElement("label");
-    label.className = "form__label";
-    label.setAttribute("for", `option-${this.slugify(this.sortedProductOptions[category].title)}`);
-    label.textContent = this.sortedProductOptions[category].label;
-
-    let selectDiv = document.createElement("div");
-    selectDiv.className = "select";
-
-    let select = this.createSelectElement(category, optionValues);
-
-    selectDiv.appendChild(select);
-    div.appendChild(label);
-    div.appendChild(selectDiv);
-
-    return div;
+  createOptionDiv(title, options) {
+    let divElement = document.createElement("div");
+    let titleElement = document.createElement("h3");
+    titleElement.textContent = this.slugify(title);
+    divElement.appendChild(titleElement);
+    
+    // Create radio buttons with image for each option
+    for (const option of options) {
+      let radioButton = document.createElement("input");
+      radioButton.type = "radio";
+      radioButton.name = title;
+      radioButton.value = option.value;
+  
+      let labelElement = document.createElement("label");
+      labelElement.textContent = option.value;
+  
+      let imgElement = document.createElement("img");
+      imgElement.src = option.imageUrl;
+      imgElement.alt = option.value;
+  
+      labelElement.appendChild(radioButton);
+      labelElement.appendChild(imgElement);
+      divElement.appendChild(labelElement);
+    }
+  
+    return divElement;
   }
+  
 
   createSelectElement(category, optionValues) {
     let select = document.createElement("select");
