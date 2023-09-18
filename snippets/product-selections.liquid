@@ -226,19 +226,23 @@
   }
   /* Style the accordion panel. Note: hidden by default */
   {{ selector_id }} .panel {
-    padding: 0 18px;
+    padding: 0;
     background-color: white;
     max-height: 0;
     overflow: hidden;
     border: none;
-    transition: max-height 0.2s ease-out;
+    transition: all 0.2s ease-out;
   }
   
   {{ selector_id }} .accordion.active + .panel {
     border: 1px solid #ccc;
+    padding: 18px;
   }
   
   {{ selector_id }} fieldset legend {
+    display: none;
+  }
+  {{ selector_id }} fieldset label input {
     display: none;
   }
   {{ selector_id }} .loader {

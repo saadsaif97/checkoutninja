@@ -120,7 +120,7 @@ class ProductOptions {
     let label = document.createElement("label");
     label.classList = "accordion"
     
-    label.innerHTML = `${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span>`;
+    label.innerHTML = `<small>${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span></small>`;
 
     mainDiv.appendChild(label);
 
@@ -145,7 +145,7 @@ class ProductOptions {
       if (index == 0) radioButton.setAttribute("checked", true);
 
       let optionLabel = document.createElement("label");
-      optionLabel.innerText = option.value;
+      optionLabel.innerHTML = `<span class="title">${option.value}</span>`;
       
       if(option.imageUrl) {
         let imgElement = document.createElement("img");
@@ -170,25 +170,5 @@ class ProductOptions {
     const selectedContainer = document.querySelector(`#selected-${fieldsetName}`)
     selectedContainer.innerText = e.target.dataset.rawValue
     console.log(selectedContainer)
-  }
-
-  createSelectElement(category, optionValues) {
-    let select = document.createElement("select");
-    select.id = `option-${this.slugify(
-      this.sortedProductOptions[category].title
-    )}`;
-    select.className = "select__select";
-    select.name = category;
-    select.dataset.url_sorting =
-      this.sortedProductOptions[category].url_sorting;
-
-    optionValues.forEach((value) => {
-      let optionElement = document.createElement("option");
-      optionElement.value = this.slugify(value.value);
-      optionElement.textContent = value.value;
-      select.appendChild(optionElement);
-    });
-
-    return select;
   }
 }
