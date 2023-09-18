@@ -174,6 +174,5 @@ class ProductOptions {
     const fieldsetName = e.target.name
     const selectedContainer = document.querySelector(`#selected-${fieldsetName}`)
     selectedContainer.innerText = e.target.dataset.rawValue
-    console.log(selectedContainer)
   }
 }
