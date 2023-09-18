@@ -194,55 +194,62 @@
   }
 </script>
 
+{%- assign selector_id = "#" | append: uid -%}
 <style>
   /* Style the buttons that are used to open and close the accordion panel */
-  .accordion {
+  {{ selector_id }} .accordion {
+    margin-top: 0;
     background-color: #eee;
     color: #444;
     cursor: pointer;
     padding: 18px;
+    display: block;
     width: 100%;
     text-align: left;
     border: none;
     outline: none;
     transition: 0.4s;
   }
-  
-  .accordion:after {
+  {{ selector_id }} .accordion:after {
     content: '\25BC'; /* Unicode character for "chevron down" */
     font-size: 13px;
     color: #777;
     float: right;
     margin-left: 5px;
   }
-
-  .active:after {
+  {{ selector_id }} .active:after {
     content: '\25B2'; /* Unicode character for "chevron up" */
   }
-
-
   /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-  .active, .accordion:hover {
+  {{ selector_id }} .active, .accordion:hover {
     background-color: #ccc;
   }
-
   /* Style the accordion panel. Note: hidden by default */
-  .panel {
+  {{ selector_id }} .panel {
     padding: 0 18px;
     background-color: white;
     max-height: 0;
     overflow: hidden;
+    border: none;
     transition: max-height 0.2s ease-out;
   }
-  .loader {
+  
+  {{ selector_id }} .accordion.active + .panel {
+    border: 1px solid #ccc;
+  }
+  
+  {{ selector_id }} fieldset legend {
+    display: none;
+  }
+  {{ selector_id }} .loader {
     position: relative;
     opacity: 0.8;
     transition: opacity 0.3s;
     cursor: not-allowed;
     pointer-events: none;
   }
-  .loader:after,
-  .loader:before {
+  {{ selector_id }} .loader:after,
+  {{ selector_id }} .loader:before {
     content: '';
     position: absolute;
     width: 100px;
@@ -254,11 +261,11 @@
     z-index: 4;
     opacity: 0;
   }
-  .loader:before {
+  {{ selector_id }} .loader:before {
     background: #444444;
     opacity: 1;
   }
-  .loader:after {
+  {{ selector_id }} .loader:after {
     opacity: 0;
     animation: preloading 0.5s ease 0.3s infinite;
   }
