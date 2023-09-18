@@ -150,7 +150,7 @@ class ProductOptions {
       if (index == 0) radioButton.setAttribute("checked", true);
 
       let optionLabel = document.createElement("label");
-      optionLabel.innerHTML = `<span class="title">${option.value}</span>`;
+      optionLabel.innerHTML = `<span class="title"><small>${option.value}</small></span>`;
       
       if(option.imageUrl) {
         let imgElement = document.createElement("img");

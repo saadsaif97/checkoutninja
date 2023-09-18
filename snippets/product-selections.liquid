@@ -256,6 +256,9 @@
     overflow: hidden;
     border: none;
     transition: all 0.2s ease-out;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
   }
   
   {{ selector_id }} .accordion.active + .panel {
@@ -273,6 +276,7 @@
     min-height: 120px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
   }
   {{ selector_id }} fieldset label img {
     width: 100%;
@@ -280,6 +284,8 @@
   {{ selector_id }} fieldset label > * {
     margin: 0;
     padding: 0;
+    line-height: 1.1;
+    text-align: center;
   }
   {{ selector_id }} .loader {
     position: relative;
