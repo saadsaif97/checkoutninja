@@ -1,4 +1,5 @@
 {%- assign uid = 'product_options' | append: product.id -%}
+{%- assign selector_id = "#" | append: uid -%}
 {%- assign product_options = product.collections.first.metafields.product.options -%}
 
 {% if product_options %}
@@ -18,7 +19,7 @@
     addEventListeners()
   
     function addEventListeners() {
-      document.querySelectorAll("#{{ uid }} select[id^='option-']").forEach(option => {
+      document.querySelectorAll("{{ selector_id }} select[id^='option-']").forEach(option => {
         option.addEventListener('change', async (e) => {
           updatePDPWithSelectProductData()
         })
@@ -61,7 +62,7 @@
     }
     
     function getSelectedHandle() {
-      let joinedOptions = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
+      let joinedOptions = Array.from(document.querySelectorAll("{{ selector_id }} select[id^='option-']")).map(option => option.value).join("-")
       return `{{ product.handle }}-${joinedOptions}`
     }
     
@@ -194,7 +195,6 @@
   }
 </script>
 
-{%- assign selector_id = "#" | append: uid -%}
 <style>
   /* Style the buttons that are used to open and close the accordion panel */
   {{ selector_id }} .accordion {
