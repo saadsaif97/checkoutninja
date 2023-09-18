@@ -1,34 +1,19 @@
 {%- assign uid = 'product_options' | append: product.id -%}
-{%- assign options = product.metafields.product.selections.value | sort: 'frontend_sorting' -%}
+{%- assign product_options = product.metafields.variant.options -%}
 
-{% if options %}
-{%- for option in options -%}
-  <div id="{{ uid }}" class="product-form__input product-form__input--dropdown">
-    <label class="form__label" for="option-{{ option.label }}">
-      {{ option.label }}
-    </label>
-    <div class="select">
-      <select
-        id="option-{{ option.label }}"
-        class="select__select"
-        name="{{ option.label | escape }}"
-        data-url_sorting="{{ option.sorting_in_product_handle }}"
-      >
-        {% for value in option.values.value %}
-          <option value="{{ value | handle }}">{{ value }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-{%- endfor -%}
+{% if product_options %}
+<div id="{{ uid }}"></div>
 
+{{ 'starfiredirect.js' | asset_url | script_tag }}
 <script defer>
   
   (()=>{
+    const productOptions = {{ product_options }};
+    if(!Object.keys(productOptions).length) return;
     
-    const sortedOptionsBasedOnProductUrlPosition = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).sort( (a, b) => { 
-      return parseInt(a.dataset.url_sorting) - parseInt(b.dataset.url_sorting) 
-    });
+    const productOptionsInstance = new ProductOptions("{{ uid }}", productOptions);
+    productOptionsInstance.renderAllOptions();
+    
     
     addEventListeners()
   
@@ -76,8 +61,8 @@
     }
     
     function getSelectedHandle() {
-      let values = sortedOptionsBasedOnProductUrlPosition.map(option => option.value).join("-")
-      return `{{ product.handle }}-${values}`
+      let joinedOptions = Array.from(document.querySelectorAll("#{{ uid }} select[id^='option-']")).map(option => option.value).join("-")
+      return `{{ product.handle }}-${joinedOptions}`
     }
     
     async function renderTitle(product_handle) {
