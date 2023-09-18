@@ -204,6 +204,9 @@
 
 <style>
   /* Style the buttons that are used to open and close the accordion panel */
+  {{ selector_id }} > div {
+    border: 1px solid #ccc;
+  }
   {{ selector_id }} .accordion {
     margin-top: 0;
     background-color: #eee;
@@ -243,7 +246,6 @@
   }
   
   {{ selector_id }} .accordion.active + .panel {
-    border: 1px solid #ccc;
     padding: 18px;
   }
   
