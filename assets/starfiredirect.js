@@ -138,6 +138,8 @@ class ProductOptions {
       radioButton.type = "radio";
       radioButton.name = this.slugify(title);
       radioButton.value = this.slugify(option.value);
+      radioButton.onclick = this.updateTitle
+      radioButton.dataset.rawValue = option.value
       if (index == 0) radioButton.setAttribute("checked", true);
 
       let optionLabel = document.createElement("label");
@@ -159,6 +161,13 @@ class ProductOptions {
     mainDiv.appendChild(fieldset);
 
     return mainDiv;
+  }
+  
+  updateTitle(e) {
+    const fieldsetName = e.target.name
+    const selectedContainer = document.querySelector(`#selected-${fieldsetName}`)
+    selectedContainer.innerText = e.target.dataset.rawValue
+    console.log(selectedContainer)
   }
 
   createSelectElement(category, optionValues) {
