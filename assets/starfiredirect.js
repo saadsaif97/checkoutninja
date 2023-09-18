@@ -61,7 +61,7 @@ class ProductOptions {
 
   sortOptions() {
     let entries = this.options.sort(
-      (a, b) => a[1].frontend_sorting - b[1].frontend_sorting
+      (a, b) => a.frontend_sorting - b.frontend_sorting
     );
     this.sortedProductOptions = Object.fromEntries(entries);
   }
