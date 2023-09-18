@@ -46,7 +46,7 @@
 class ProductOptions {
   constructor(uid, options) {
     this.uid = uid;
-    this.options = options;
+    this.options = options.options;
     this.productOptionsDiv = document.getElementById(this.uid);
     this.sortOptions();
   }
