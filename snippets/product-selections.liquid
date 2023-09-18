@@ -201,6 +201,12 @@
 
       let panel = this.nextElementSibling;
       panel.style.maxHeight = (panel.style.maxHeight) ? null : panel.scrollHeight + "px";
+      
+      setTimeout(() => {
+        if(this.classList.contains("active")) {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      }, 1000)
     });
   }
 </script>
@@ -273,7 +279,7 @@
   }
   {{ selector_id }} fieldset label {
     max-width: 70px;
-    min-height: 120px;
+    min-height: 96px;
     display: flex;
     flex-direction: column;
     gap: 8px;
