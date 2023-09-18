@@ -115,34 +115,50 @@ class ProductOptions {
   }
 
   createOptionDiv(title, options) {
-    let divElement = document.createElement("div");
-    let titleElement = document.createElement("h3");
-    titleElement.textContent = this.slugify(title);
-    divElement.appendChild(titleElement);
+    let mainDiv = document.createElement("div");
 
-    // Create radio buttons with image for each option
+    let label = document.createElement("label");
+    
+    label.innerHTML = `${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span>`;
+
+    mainDiv.appendChild(label);
+
+    let fieldset = document.createElement("fieldset");
+    fieldset.name = title;
+
+    let legend = document.createElement("legend");
+    legend.textContent = title;
+    
+    fieldset.appendChild(legend);
+    
     options.forEach((option, index) => {
+      let optionDiv = document.createElement("div");
+
       let radioButton = document.createElement("input");
       radioButton.type = "radio";
-      radioButton.name = title;
+      radioButton.name = this.slugify(title);
       radioButton.value = this.slugify(option.value);
-      if (index == 0) {
-        radioButton.setAttribute("checked", true);
+      if (index == 0) radioButton.setAttribute("checked", true);
+
+      let optionLabel = document.createElement("label");
+      optionLabel.innerText = option.value;
+      
+      if(option.imageUrl) {
+        let imgElement = document.createElement("img");
+        imgElement.src = option.imageUrl;
+        imgElement.alt = option.value;
+        optionLabel.prepend(imgElement)
       }
+      
+      optionLabel.appendChild(radioButton);
+      optionDiv.appendChild(optionLabel);
 
-      let labelElement = document.createElement("label");
-      labelElement.textContent = option.value;
+      fieldset.appendChild(optionDiv);
+    })
+    
+    mainDiv.appendChild(fieldset);
 
-      let imgElement = document.createElement("img");
-      imgElement.src = option.imageUrl;
-      imgElement.alt = option.value;
-
-      labelElement.prepend(imgElement);
-      labelElement.appendChild(radioButton);
-      divElement.appendChild(labelElement);
-    });
-
-    return divElement;
+    return mainDiv;
   }
 
   createSelectElement(category, optionValues) {
