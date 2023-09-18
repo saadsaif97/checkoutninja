@@ -139,6 +139,7 @@ class ProductOptions {
     
     options.forEach((option, index) => {
       let optionDiv = document.createElement("div");
+      optionDiv.classList = "option-value"
 
       let radioButton = document.createElement("input");
       radioButton.type = "radio";
