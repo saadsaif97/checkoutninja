@@ -106,8 +106,8 @@ class ProductOptions {
 
     optionValues.forEach((value) => {
       let optionElement = document.createElement("option");
-      optionElement.value = this.slugify(value);
-      optionElement.textContent = value;
+      optionElement.value = this.slugify(value.value);
+      optionElement.textContent = value.value;
       select.appendChild(optionElement);
     });
 
