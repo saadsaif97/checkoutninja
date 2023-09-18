@@ -60,10 +60,9 @@ class ProductOptions {
   }
 
   sortOptions() {
-    let entries = this.options.sort(
+    this.sortedProductOptions = this.options.sort(
       (a, b) => a.frontend_sorting - b.frontend_sorting
     );
-    this.sortedProductOptions = Object.fromEntries(entries);
   }
 
   renderAllOptions() {
