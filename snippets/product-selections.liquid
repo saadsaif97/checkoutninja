@@ -259,7 +259,6 @@
   /* Style the accordion panel. Note: hidden by default */
   {{ selector_id }} .panel {
     padding: 0;
-    background-color: white;
     max-height: 0;
     overflow: hidden;
     border: none;
@@ -280,11 +279,29 @@
     display: none;
   }
   {{ selector_id }} fieldset label {
-    max-width: 70px;
+    max-width: 80px;
     min-height: 96px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    padding: 5px;
+    position: relative;
+  }
+  {{ selector_id }} fieldset label .highlightSelected {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #e9e9e9;
+    display: none;
+  }
+  {{ selector_id }} fieldset label > input[type="radio"]:checked ~ .highlightSelected {
+    display: block;
+  }
+  {{ selector_id }} fieldset label > input[type="radio"]:checked ~ .title {
+    font-weight: bold;
   }
   {{ selector_id }} fieldset label img {
     width: 100%;

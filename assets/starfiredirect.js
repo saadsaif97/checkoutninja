@@ -133,7 +133,7 @@ class ProductOptions {
 
     let fieldset = document.createElement("fieldset");
     fieldset.classList = "panel";
-    fieldset.name = title;
+    fieldset.id = this.slugify(title);
 
     let legend = document.createElement("legend");
     legend.textContent = title;
@@ -141,9 +141,6 @@ class ProductOptions {
     fieldset.appendChild(legend);
 
     options.forEach((option, index) => {
-      let optionDiv = document.createElement("div");
-      optionDiv.classList = "option-value";
-
       let radioButton = document.createElement("input");
       radioButton.type = "radio";
       radioButton.name = this.slugify(title);
@@ -163,11 +160,13 @@ class ProductOptions {
         imgElement.alt = option.value;
         optionLabel.prepend(imgElement);
       }
+      
+      let highlightSelected = document.createElement("span")
+      highlightSelected.classList = "highlightSelected"
 
-      optionLabel.appendChild(radioButton);
-      optionDiv.appendChild(optionLabel);
-
-      fieldset.appendChild(optionDiv);
+      optionLabel.prepend(radioButton);
+      optionLabel.appendChild(highlightSelected);
+      fieldset.appendChild(optionLabel);
     });
 
     mainDiv.appendChild(fieldset);
