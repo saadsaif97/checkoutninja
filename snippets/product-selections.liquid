@@ -313,15 +313,15 @@
     line-height: 1.1;
     text-align: center;
   }
-  {{ selector_id }} .loader {
+  .loader {
     position: relative;
     opacity: 0.8;
     transition: opacity 0.3s;
     cursor: not-allowed;
     pointer-events: none;
   }
-  {{ selector_id }} .loader:after,
-  {{ selector_id }} .loader:before {
+  .loader:after,
+  .loader:before {
     content: '';
     position: absolute;
     width: 100px;
@@ -333,11 +333,11 @@
     z-index: 4;
     opacity: 0;
   }
-  {{ selector_id }} .loader:before {
+  .loader:before {
     background: #444444;
     opacity: 1;
   }
-  {{ selector_id }} .loader:after {
+  .loader:after {
     opacity: 0;
     animation: preloading 0.5s ease 0.3s infinite;
   }
