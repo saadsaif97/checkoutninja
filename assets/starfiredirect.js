@@ -114,6 +114,13 @@ class ProductOptions {
       this.productOptionsDiv.appendChild(divElement);
     }
   }
+  
+  getDefaultOption(options) {
+    let selectedValue = options.find(option=>  window.location.href.includes(this.slugify(option.value)))
+    if(selectedValue) return selectedValue
+    
+    return options[0]
+  }
 
   createOptionDiv(title, options, url_sorting) {
     let mainDiv = document.createElement("div");
@@ -121,10 +128,12 @@ class ProductOptions {
     let label = document.createElement("label");
     label.classList = "accordion";
     label.title = title;
+    
+    let defaultOption = this.getDefaultOption(options)
 
     label.innerHTML = `
       <small>${title} | <span id="selected-${this.slugify(title)}"> ${
-      options[0].value
+      defaultOption.value
     } </span></small>
       <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"></path></svg>
     `;
@@ -149,7 +158,7 @@ class ProductOptions {
       radioButton.dataset.rawValue = option.value;
       radioButton.dataset.url_sorting = url_sorting;
 
-      if (index == 0) radioButton.setAttribute("checked", '');
+      if (option.value == defaultOption.value) radioButton.setAttribute("checked", '');
 
       let optionLabel = document.createElement("label");
       optionLabel.innerHTML = `<span class="title"><small>${option.value}</small></span>`;
