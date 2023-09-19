@@ -175,6 +175,8 @@ class ProductOptions {
   }
 
   updateTitle() {
+    // uncheck all from this fieldset before checking current value
+    this.closest('fieldset').querySelectorAll('input').forEach(input => input.removeAttribute('checked'))
     this.setAttribute("checked", '')
     const fieldsetName = this.name;
     const selectedContainer = document.querySelector(
