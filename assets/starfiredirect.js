@@ -199,5 +199,8 @@ class ProductOptions {
       }, "").slice(1);
       
     console.log({selectedValue: selectedValue.trim('-')})
+    
+    let event = new CustomEvent('product:selected', { detail: selectedValue });
+    window.dispatchEvent(event);
   }
 }

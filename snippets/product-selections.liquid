@@ -1,6 +1,8 @@
 {%- assign uid = 'product_options' | append: product.id -%}
 {%- assign selector_id = "#" | append: uid -%}
-{%- assign product_options = product.collections.first.metafields.product.options -%}
+{%- assign family_collection = collections[product.metafields.family.collection] -%}
+{%- assign product_options = family_collection.metafields.product.options -%}
+{%- assign base_handle = family_collection.metafields.product.base_handle -%}
 
 {% if product_options %}
 <div class="product-selections">
@@ -21,20 +23,13 @@
     productOptionsInstance.renderAllOptions();
     
     
-    addEventListeners()
-  
-    function addEventListeners() {
-      document.querySelectorAll("{{ selector_id }} select[id^='option-']").forEach(option => {
-        option.addEventListener('change', async (e) => {
-          updatePDPWithSelectProductData()
-        })
-      })
-      
-      //updatePDPWithSelectProductData() 
-    }
+    window.addEventListener("product:selected", e => {
+      const selected_options = e.detail
+      updatePDPWithSelectedProductData(selected_options)
+    })
     
-    async function updatePDPWithSelectProductData() {
-      let selectedHandle = getSelectedHandle()
+    async function updatePDPWithSelectedProductData(selected_options) {
+      const selectedHandle = getSelectedHandle(selected_options)
       productId = getProductIdFromHandle(selectedHandle)
       updateAddToCartId()
       await fetchProduct(selectedHandle)
@@ -66,9 +61,8 @@
       history.pushState({}, null, `https://${window.Shopify.shop}/products/${selectedHandle}`)
     }
     
-    function getSelectedHandle() {
-      let joinedOptions = Array.from(document.querySelectorAll("{{ selector_id }} select[id^='option-']")).map(option => option.value).join("-")
-      return `{{ product.handle }}-${joinedOptions}`
+    function getSelectedHandle(selected_options) {
+      return `{{ base_handle }}-${selected_options}`
     }
     
     async function renderTitle(product_handle) {
@@ -165,7 +159,6 @@
 
     
     function getProductIdFromHandle(selectedHandle) {
-      {%- assign family_collection = collections[product.metafields.family.collection] -%}
       {% paginate family_collection.products by 1000 %}
         let products = [
           {% for product in family_collection.products %}
