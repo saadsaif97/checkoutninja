@@ -100,7 +100,7 @@ class ProductOptions {
 
   sortOptions() {
     this.sortedProductOptions = this.options.sort(
-      (a, b) => a.frontend_sorting - b.frontend_sorting
+      (a, b) => parseInt(a.frontend_sorting) - parseInt(b.frontend_sorting)
     );
   }
 
@@ -108,71 +108,86 @@ class ProductOptions {
     for (const category in this.sortedProductOptions) {
       let divElement = this.createOptionDiv(
         this.sortedProductOptions[category].title,
-        this.sortedProductOptions[category].options
+        this.sortedProductOptions[category].options,
+        this.sortedProductOptions[category].url_sorting
       );
       this.productOptionsDiv.appendChild(divElement);
     }
   }
 
-  createOptionDiv(title, options) {
+  createOptionDiv(title, options, url_sorting) {
     let mainDiv = document.createElement("div");
 
     let label = document.createElement("label");
-    label.classList = "accordion"
-    label.title = title
-    
+    label.classList = "accordion";
+    label.title = title;
+
     label.innerHTML = `
-      <small>${title} | <span id="selected-${this.slugify(title)}"> ${options[0].value} </span></small>
+      <small>${title} | <span id="selected-${this.slugify(title)}"> ${
+      options[0].value
+    } </span></small>
       <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"></path></svg>
     `;
 
     mainDiv.appendChild(label);
 
     let fieldset = document.createElement("fieldset");
-    fieldset.classList = "panel"
+    fieldset.classList = "panel";
     fieldset.name = title;
 
     let legend = document.createElement("legend");
     legend.textContent = title;
-    
+
     fieldset.appendChild(legend);
-    
+
     options.forEach((option, index) => {
       let optionDiv = document.createElement("div");
-      optionDiv.classList = "option-value"
+      optionDiv.classList = "option-value";
 
       let radioButton = document.createElement("input");
       radioButton.type = "radio";
       radioButton.name = this.slugify(title);
       radioButton.value = this.slugify(option.value);
-      radioButton.onclick = this.updateTitle
-      radioButton.dataset.rawValue = option.value
-      if (index == 0) radioButton.setAttribute("checked", true);
+      radioButton.onclick = this.updateTitle;
+      radioButton.dataset.rawValue = option.value;
+      radioButton.dataset.url_sorting = url_sorting;
+
+      if (index == 0) radioButton.setAttribute("checked", '');
 
       let optionLabel = document.createElement("label");
       optionLabel.innerHTML = `<span class="title"><small>${option.value}</small></span>`;
-      
-      if(option.imageUrl) {
+
+      if (option.imageUrl) {
         let imgElement = document.createElement("img");
         imgElement.src = option.imageUrl;
         imgElement.alt = option.value;
-        optionLabel.prepend(imgElement)
+        optionLabel.prepend(imgElement);
       }
-      
+
       optionLabel.appendChild(radioButton);
       optionDiv.appendChild(optionLabel);
 
       fieldset.appendChild(optionDiv);
-    })
-    
+    });
+
     mainDiv.appendChild(fieldset);
 
     return mainDiv;
   }
-  
-  updateTitle(e) {
-    const fieldsetName = e.target.name
-    const selectedContainer = document.querySelector(`#selected-${fieldsetName}`)
-    selectedContainer.innerText = e.target.dataset.rawValue
+
+  updateTitle() {
+    this.setAttribute("checked", '')
+    const fieldsetName = this.name;
+    const selectedContainer = document.querySelector(
+      `#selected-${fieldsetName}`
+    );
+    selectedContainer.innerText = this.dataset.rawValue;
+    const selectedValue = Array.from(document.querySelectorAll("input[type='radio'][checked]"))
+      .sort((a, b) => parseInt(a.url_sorting) - parseInt(b.url_sorting))
+      .reduce((url, option) => {
+        return (url += `-${option.value}`);
+      }, "").slice(1);
+      
+    console.log({selectedValue: selectedValue.trim('-')})
   }
 }

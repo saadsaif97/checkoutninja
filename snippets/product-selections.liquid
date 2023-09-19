@@ -5,7 +5,9 @@
 {% if product_options %}
 <div class="product-selections">
   <p>Select Options</p>
-  <div id="{{ uid }}"></div>
+  <form>
+    <div id="{{ uid }}"></div>
+  </form>
 </div>
 
 {{ 'starfiredirect.js' | asset_url | script_tag }}
