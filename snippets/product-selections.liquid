@@ -30,19 +30,27 @@
     
     async function updatePDPWithSelectedProductData(selected_options) {
       const selectedHandle = getSelectedHandle(selected_options)
-      productId = getProductIdFromHandle(selectedHandle)
-      updateAddToCartId()
-      await fetchProduct(selectedHandle)
+      productId = getProductIdFromHandle(selectedHandle);
       
-      // DOM update start
-      addLoader()
-      updateUrl(selectedHandle)
-      await renderTitle(selectedHandle)
-      await renderPrice(selectedHandle)
-      await renderGallery(selectedHandle)
-      removeLoader()
-      // DOM update end
-      console.log({selectedHandle})
+      // Parallelize fetch and initial DOM updates.
+      const fetchProductPromise = fetchProduct(selectedHandle);
+      updateAddToCartId();
+      addLoader();
+      updateUrl(selectedHandle);
+
+      // Wait for product fetch to complete before proceeding.
+      await fetchProductPromise;
+
+      // Parallelize the remaining DOM updates.
+      const renderTitlePromise = renderTitle(selectedHandle);
+      const renderPricePromise = renderPrice(selectedHandle);
+      const renderGalleryPromise = renderGallery(selectedHandle);
+
+      // Wait for all asynchronous operations to complete.
+      await Promise.all([renderTitlePromise, renderPricePromise, renderGalleryPromise]);
+
+      removeLoader();
+      console.log({selectedHandle});
     }
     
     function updateAddToCartId() {
