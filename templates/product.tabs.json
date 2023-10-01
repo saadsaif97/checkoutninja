@@ -10,6 +10,12 @@
             "text_style": "uppercase"
           }
         },
+        "e8a6b63c-1fb4-4f96-8a4d-87e6fb2d5d2f": {
+          "type": "sku",
+          "settings": {
+            "text_style": "body"
+          }
+        },
         "title": {
           "type": "title",
           "settings": {
@@ -57,6 +63,7 @@
       },
       "block_order": [
         "vendor",
+        "e8a6b63c-1fb4-4f96-8a4d-87e6fb2d5d2f",
         "title",
         "price",
         "variant_picker",
