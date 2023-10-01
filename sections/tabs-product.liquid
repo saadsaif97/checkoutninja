@@ -435,6 +435,8 @@
               {% render 'icon-with-text',
                 block: block
               %}
+            {%- when 'tabs' -%}
+              {% render 'pdp-tabs' %}
           {%- endcase -%}
         {%- endfor -%}
         <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -986,6 +988,10 @@
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.page.label"
         }
       ]
+    },
+    {
+      "type": "tabs",
+      "name": "Product tabs"
     },
     {
       "type": "popup",
