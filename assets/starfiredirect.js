@@ -108,6 +108,7 @@ class ProductOptions {
     for (const category in this.sortedProductOptions) {
       let divElement = this.createOptionDiv(
         this.sortedProductOptions[category].title,
+        this.sortedProductOptions[category].label,
         this.sortedProductOptions[category].options,
         this.sortedProductOptions[category].url_sorting
       );
@@ -122,7 +123,7 @@ class ProductOptions {
     return options[0]
   }
 
-  createOptionDiv(title, options, url_sorting) {
+  createOptionDiv(title, optionLabel, options, url_sorting) {
     let mainDiv = document.createElement("div");
 
     let label = document.createElement("label");
@@ -132,7 +133,7 @@ class ProductOptions {
     let defaultOption = this.getDefaultOption(options)
 
     label.innerHTML = `
-      <small>${title} | <span id="selected-${this.slugify(title)}"> ${
+      <small>${optionLabel} | <span id="selected-${this.slugify(title)}"> ${
       defaultOption.value
     } </span></small>
       <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 28 16"><path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"></path></svg>
@@ -193,7 +194,7 @@ class ProductOptions {
     );
     selectedContainer.innerText = this.dataset.rawValue;
     const selectedValue = Array.from(document.querySelectorAll("input[type='radio'][checked]"))
-      .sort((a, b) => parseInt(a.url_sorting) - parseInt(b.url_sorting))
+      .sort((a, b) => parseInt(a.dataset.url_sorting) - parseInt(b.dataset.url_sorting))
       .reduce((url, option) => {
         return (url += `-${option.value}`);
       }, "").slice(1);

@@ -5,7 +5,7 @@
 {%- assign base_handle = family_collection.metafields.product.base_handle -%}
 
 {% if product_options %}
-<div class="product-selections">
+<div class="product-switcher">
   <p>Select Options</p>
   <form>
     <div id="{{ uid }}"></div>
@@ -45,9 +45,12 @@
       const renderTitlePromise = renderTitle(selectedHandle);
       const renderPricePromise = renderPrice(selectedHandle);
       const renderGalleryPromise = renderGallery(selectedHandle);
+      const renderButtonsPromise = renderButtons(selectedHandle);
+      const renderDescriptionPromise = renderDescription(selectedHandle);
 
       // Wait for all asynchronous operations to complete.
-      await Promise.all([renderTitlePromise, renderPricePromise, renderGalleryPromise]);
+      await Promise.all([renderTitlePromise, renderPricePromise, renderGalleryPromise, renderButtonsPromise, renderDescriptionPromise]);
+      initializeMediaInstances();
 
       removeLoader();
       console.log({selectedHandle});
@@ -58,11 +61,11 @@
     }
     
     function addLoader() {
-      document.querySelector("[id^='MainProduct']")?.classList.add('loader')
+      document.querySelector("#sf-product")?.classList.add('sfLoader')
     }
     
     function removeLoader() {
-      document.querySelector("[id^='MainProduct']")?.classList.remove('loader')
+      document.querySelector("#sf-product")?.classList.remove('sfLoader')
     }
     
     function updateUrl(selectedHandle) {
@@ -82,7 +85,7 @@
         let text = await response.text();
         let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-title').innerHTML;
         
-        let querySelector = ".product__title"
+        let querySelector = "#sf-product-title"
         let titleContainer = document.querySelector(querySelector)
         if(!titleContainer) throw new Error(`title container is not correct ${querySelector}`)
         titleContainer.innerHTML = htmlMarkup
@@ -101,7 +104,7 @@
         let text = await response.text();
         let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-price').innerHTML;
         
-        let querySelector = "[id^='price']"
+        let querySelector = "#sf-product-price"
         let container = document.querySelector(querySelector)
         if(!container) throw new Error(`price container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
@@ -121,12 +124,50 @@
         let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-gallery').innerHTML;
         
         // remove previous product media modal
-        document.querySelector('product-modal')?.remove()
+        //document.querySelector('product-modal')?.remove()
         
-        let querySelector = ".product__media-wrapper"
+        let querySelector = "#sf-product-gallery"
         let container = document.querySelector(querySelector)
         if(!container) throw new Error(`gallery container is not correct ${querySelector}`)
         container.innerHTML = htmlMarkup
+      } catch (error) {
+        throw error;
+      }
+    }
+    
+    async function renderButtons(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=sf-product-buttons`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-sf-product-buttons').innerHTML;
+        
+        let querySelector = "#sf-product-buttons"
+        let container = document.querySelector(querySelector)
+        if(!container) throw new Error(`price container is not correct ${querySelector}`)
+        container.innerHTML = htmlMarkup
+
+      } catch (error) {
+        throw error;
+      }
+    }
+    
+    async function renderDescription(product_handle) {
+      try {
+        let response = await fetch(`https://${window.Shopify.shop}/products/${product_handle}?section_id=sf-product-description`);
+
+        if (!response.ok) throw new Error(response.status);
+
+        let text = await response.text();
+        let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-sf-product-description').innerHTML;
+        
+        let querySelector = "#sf-product-description"
+        let container = document.querySelector(querySelector)
+        if(!container) throw new Error(`price container is not correct ${querySelector}`)
+        container.innerHTML = htmlMarkup
+
       } catch (error) {
         throw error;
       }
@@ -152,6 +193,12 @@
       } catch (error) {
         throw error;
       }
+    }
+    
+    function initializeMediaInstances() {
+      Object.keys(theme.mediaInstances).forEach(instance => {
+        theme.mediaInstances[instance].init()
+      })
     }
 
     
@@ -216,8 +263,9 @@
 
 <style>
   /* Style the buttons that are used to open and close the accordion panel */
-  .product-selections {
-    margin-bottom: 20px;  
+  .product-switcher {
+    margin-bottom: 20px;
+    user-select: none;
   }
   
   {{ selector_id }} {
@@ -226,15 +274,14 @@
   }
   
   {{ selector_id }} > div {
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
   }
   {{ selector_id }} .accordion {
     margin-top: 0;
     user-select: none;
-    background-color: #eee;
     color: #444;
     cursor: pointer;
-    padding: 18px;
+    padding: 10px 18px;
     width: 100%;
     text-align: left;
     border: none;
@@ -255,7 +302,7 @@
   }
   /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
   {{ selector_id }} .active, .accordion:hover {
-    background-color: #ccc;
+    background-color: #eee;
   }
   /* Style the accordion panel. Note: hidden by default */
   {{ selector_id }} .panel {
@@ -280,13 +327,25 @@
     display: none;
   }
   {{ selector_id }} fieldset label {
-    max-width: 80px;
+    width: 120px;
     min-height: 96px;
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 8px;
-    padding: 5px;
     position: relative;
+    z-index: 10;
+    border: 1px solid #e9e9e9;
+  }
+  {{ selector_id }} fieldset label .title {
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+  {{ selector_id }} fieldset label small {
+    font-size: 12px;
   }
   {{ selector_id }} fieldset label .highlightSelected {
     position: absolute;
@@ -297,6 +356,11 @@
     z-index: -1;
     background-color: #e9e9e9;
     display: none;
+  }
+  
+  {{ selector_id }} fieldset label:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
   }
   {{ selector_id }} fieldset label > input[type="radio"]:checked ~ .highlightSelected {
     display: block;
@@ -313,15 +377,15 @@
     line-height: 1.1;
     text-align: center;
   }
-  .loader {
+  .sfLoader {
     position: relative;
     opacity: 0.8;
     transition: opacity 0.3s;
     cursor: not-allowed;
     pointer-events: none;
   }
-  .loader:after,
-  .loader:before {
+  .sfLoader:after,
+  .sfLoader:before {
     content: '';
     position: absolute;
     width: 100px;
@@ -333,11 +397,11 @@
     z-index: 4;
     opacity: 0;
   }
-  .loader:before {
+  .sfLoader:before {
     background: #444444;
     opacity: 1;
   }
-  .loader:after {
+  .sfLoader:after {
     opacity: 0;
     animation: preloading 0.5s ease 0.3s infinite;
   }
