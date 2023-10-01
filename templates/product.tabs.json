@@ -48,15 +48,6 @@
           "settings": {
             "share_label": "Share"
           }
-        },
-        "0198e8e9-f068-4ce1-adea-daae170b0653": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
-            "content": "{{ product.metafields.options.size | metafield_tag }}",
-            "page": ""
-          }
         }
       },
       "block_order": [
@@ -67,8 +58,7 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share",
-        "0198e8e9-f068-4ce1-adea-daae170b0653"
+        "share"
       ],
       "settings": {
         "enable_sticky_info": true,
