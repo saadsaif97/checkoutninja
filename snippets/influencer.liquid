@@ -1,11 +1,11 @@
 {%- assign uid = 'influencer--' | append: product.id -%}
 
 {%- for variant in product.variants -%}
-  {%- assign firstInfluencerFound = variant.metafields.custom.influencer_block.value -%}
-  {%- if firstInfluencerFound -%}{% break %}{%- endif -%}
+  {%- assign productHasInfluencer = variant.metafields.custom.influencer_block.value -%}
+  {%- if productHasInfluencer -%}{% break %}{%- endif -%}
 {%- endfor -%}
 
-{% unless firstInfluencerFound %}
+{% unless productHasInfluencer %}
   {% if request.design_mode %}
     <div style="display: flex; min-height: 200px; justify-content: center; align-items: center; flex-direction: column; border: 1px dashed gray;">
       <p>To use this section, please assign <strong>influencer_block metafield</strong> to atleast one variant of this product and then refresh this page.</p>
@@ -13,11 +13,12 @@
   {% endif %}
 {% endunless %}
 
-{% if firstInfluencerFound %}
+{% if productHasInfluencer %}
+  {%- assign influencer = product.selected_variant.metafields.custom.influencer_block.value -%}
   <div id="{{ uid }}">
-    {% if firstInfluencerFound %}
+    {% if influencer %}
       <h3>{{ variant.id }}</h3>
-      <p>{{ firstInfluencerFound.testimonial | metafield_tag }}</p>
+      <p>{{ influencer.testimonial | metafield_tag }}</p>
     {% endif %}
   </div>
 
@@ -48,7 +49,6 @@
   <style>
     #{{ uid }} {
       width: 100%;
-      min-height: 200px;
       display: flex;
       justify-content: center;
       align-items: center;
