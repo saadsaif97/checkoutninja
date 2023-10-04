@@ -1,4 +1,2 @@
-<div>
-  {%- assign influencer = product.selected_variant.metafields.custom.influencer_block.value -%}
-  {{ influencer.testimonial | metafield_tag }}
-</div>
+{%- assign influencer = product.selected_variant.metafields.custom.influencer_block.value -%}
+{%- render 'product-influencer', influencer: influencer -%}

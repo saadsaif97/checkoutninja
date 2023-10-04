@@ -1,0 +1,11 @@
+{%- if influencer -%}
+  <div class="grid">
+    <div class="image">
+      {%- assign altText = product.title | append: ' - Influencer' -%}
+      {{ influencer.main_image | image_url: width: 800 | image_tag: alt: altText }}
+    </div>
+    <div class="content">
+      {{ influencer.testimonial | metafield_tag }}
+    </div>
+  </div>
+{%- endif -%}
