@@ -452,8 +452,6 @@
   </div>
 
   {% render 'product-media-modal' variant_images: variant_images %}
-  
-  {% render 'influencer' %}
 
   {% assign popups = section.blocks | where: 'type', 'popup' %}
   {%- for block in popups -%}
