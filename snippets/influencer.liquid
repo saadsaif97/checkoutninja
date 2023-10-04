@@ -5,21 +5,22 @@
   {%- if productHasInfluencer -%}{% break %}{%- endif -%}
 {%- endfor -%}
 
-{% unless productHasInfluencer %}
-  {% if request.design_mode %}
+{%- unless productHasInfluencer -%}
+  {%- if request.design_mode -%}
     <div style="display: flex; min-height: 200px; justify-content: center; align-items: center; flex-direction: column; border: 1px dashed gray;">
       <p>To use this section, please assign <strong>influencer_block metafield</strong> to atleast one variant of this product and then refresh this page.</p>
     </div>
-  {% endif %}
-{% endunless %}
+  {%- endif -%}
+{%- endunless -%}
 
 {% if productHasInfluencer %}
   {%- assign influencer = product.selected_variant.metafields.custom.influencer_block.value -%}
   <div id="{{ uid }}">
-    {% if influencer %}
-      <h3>{{ variant.id }}</h3>
-      <p>{{ influencer.testimonial | metafield_tag }}</p>
-    {% endif %}
+    {%- if influencer -%}
+      <div class="grid">
+        <p>{{ influencer.testimonial | metafield_tag }}</p>
+      </div>
+    {%- endif -%}
   </div>
 
   <script defer>
