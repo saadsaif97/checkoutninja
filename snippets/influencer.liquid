@@ -1,0 +1,37 @@
+{%- assign uid = "influencer--" | append: product.id -%}
+
+<div id="{{ uid }}">
+  {{ product.title }}
+</div>
+
+<style>
+  #{{ uid }} {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+<script defer>
+  window.addEventListener("variant:change", () => {
+    const url = new URL(window.location);
+    url.searchParams.append("section_id", "product-influencer");
+    const urlString = url.toString();
+  
+    console.log("variant changed", urlString)
+    fetchInfluencerSeaction(urlString)
+  })
+  
+  async function fetchInfluencerSeaction(variantUrl) {
+    let response = await fetch(variantUrl);
+    if (!response.ok) throw new Error(response.status);
+
+    let text = await response.text();
+    let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-influencer').innerHTML;
+    
+    let influencerBlock = document.querySelector("#{{ uid }}");
+    influencerBlock.innerHTML = htmlMarkup
+  }
+</script>
