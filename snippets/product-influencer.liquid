@@ -1,15 +1,21 @@
 {%- if influencer -%}
+  
+  {%- assign mainAltText = product.title | append: ' - Influencer' -%}
+  
   <div class="grid">
     <div class="image">
-      {%- assign altText = product.title | append: ' - Influencer' -%}
-      {{ influencer.main_image | image_url: width: 800 | image_tag: alt: altText }}
+      {{ influencer.main_image | image_url: width: 800 | image_tag: alt: mainAltText }}
     </div>
     <div class="content">
       <blockquote>
         {{ influencer.testimonial | metafield_tag }}
         <footer>
           <cite>
-              Teddy Roosevelt
+            {%- if influencer.signature_image -%}
+              {{ influencer.signature_image | image_url: width: 200 | image_tag: alt: influencer.name }}
+            {%- else -%}
+              <small>{{ influencer.name }}</small>
+            {%- endif -%}
           </cite>
         </footer>
       </blockquote>
