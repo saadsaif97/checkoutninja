@@ -5,7 +5,14 @@
       {{ influencer.main_image | image_url: width: 800 | image_tag: alt: altText }}
     </div>
     <div class="content">
-      {{ influencer.testimonial | metafield_tag }}
+      <blockquote>
+        {{ influencer.testimonial | metafield_tag }}
+        <footer>
+          <cite>
+              Teddy Roosevelt
+          </cite>
+        </footer>
+      </blockquote>
     </div>
   </div>
 {%- endif -%}
