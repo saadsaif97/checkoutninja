@@ -18,13 +18,15 @@
   <div id="{{ uid }}">
     {%- if influencer -%}
       <div class="grid">
-        <div>
+        <div class="image">
           {%- assign altText = product.title | append: ' - Influencer' -%}
           {{ influencer.main_image |
           image_url: width: 800 |
           image_tag: alt: altText  }}
         </div>
-        <div>{{ influencer.testimonial | metafield_tag }}</div>
+        <div class="content">
+          {{ influencer.testimonial | metafield_tag }}
+        </div>
       </div>
     {%- endif -%}
   </div>
@@ -59,6 +61,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+    #{{ uid }} .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 0;
+    }
+    #{{ uid }} .grid .image {
+      display: grid;
+    }
+    #{{ uid }} .grid img {
+      width: 100%;
+      height: auto;
+    }
+    #{{ uid }} .grid .content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 50px;
+      background-color: black;
+      color: white;
     }
   </style>
 {% endif %}
