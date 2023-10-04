@@ -23,27 +23,36 @@
   </div>
 
   <script defer>
-    window.addEventListener('variant:change', () => {
+    window.addEventListener('variant:change', fetchInfluencerSection);
+
+    async function fetchInfluencerSection() {
       const url = new URL(window.location);
       url.searchParams.append('section_id', 'product-influencer');
-      const urlString = url.toString();
-
-      console.log('variant changed', urlString);
-      fetchInfluencerSeaction(urlString);
-    });
-
-    async function fetchInfluencerSeaction(variantUrl) {
-      let response = await fetch(variantUrl);
-      if (!response.ok) throw new Error(response.status);
-
-      let text = await response.text();
-      let htmlMarkup = new DOMParser()
+    
+      try {
+        let response = await fetch(url);
+        if (!response.ok) throw new Error(response.status);
+    
+        let text = await response.text();
+        let htmlMarkup = getHtmlMarkup(text);
+    
+        updateSection(htmlMarkup);
+        console.log('variant changed', url);
+      } catch (err) {
+        console.error(`Error: ${err}`);
+      }
+    }
+    
+    function getHtmlMarkup(text) {
+      return new DOMParser()
         .parseFromString(text, 'text/html')
         .querySelector('#shopify-section-product-influencer').innerHTML;
-
-      let influencerBlock = document.querySelector('#{{ uid }}');
-      influencerBlock.innerHTML = htmlMarkup;
     }
+    
+    function updateSection(markup) {
+      let influencerBlock = document.querySelector('#{{ uid }}');
+      influencerBlock.innerHTML = markup;
+    }    
   </script>
 
   <style>
