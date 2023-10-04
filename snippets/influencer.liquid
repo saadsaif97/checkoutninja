@@ -1,37 +1,57 @@
-{%- assign uid = "influencer--" | append: product.id -%}
+{%- assign uid = 'influencer--' | append: product.id -%}
 
-<div id="{{ uid }}">
-  {{ product.title }}
-</div>
+{%- for variant in product.variants -%}
+  {%- assign firstInfluencerFound = variant.metafields.custom.influencer_block.value -%}
+  {%- if firstInfluencerFound -%}{% break %}{%- endif -%}
+{%- endfor -%}
 
-<script defer>
-  window.addEventListener("variant:change", () => {
-    const url = new URL(window.location);
-    url.searchParams.append("section_id", "product-influencer");
-    const urlString = url.toString();
-  
-    console.log("variant changed", urlString)
-    fetchInfluencerSeaction(urlString)
-  })
-  
-  async function fetchInfluencerSeaction(variantUrl) {
-    let response = await fetch(variantUrl);
-    if (!response.ok) throw new Error(response.status);
+{% unless firstInfluencerFound %}
+  {% if request.design_mode %}
+    <div style="display: flex; min-height: 200px; justify-content: center;">
+      <h3>Please assign influencer metafield to any of the variant of this product.</h3>
+    </div>
+  {% endif %}
+{% endunless %}
 
-    let text = await response.text();
-    let htmlMarkup = new DOMParser().parseFromString(text, 'text/html').querySelector('#shopify-section-product-influencer').innerHTML;
-    
-    let influencerBlock = document.querySelector("#{{ uid }}");
-    influencerBlock.innerHTML = htmlMarkup
-  }
-</script>
+{% if firstInfluencerFound %}
+  <div id="{{ uid }}">
+    {% if firstInfluencerFound %}
+      <h3>{{ variant.id }}</h3>
+      <p>{{ firstInfluencerFound.testimonial | metafield_tag }}</p>
+    {% endif %}
+  </div>
 
-<style>
-  #{{ uid }} {
-    width: 100%;
-    min-height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
+  <script defer>
+    window.addEventListener('variant:change', () => {
+      const url = new URL(window.location);
+      url.searchParams.append('section_id', 'product-influencer');
+      const urlString = url.toString();
+
+      console.log('variant changed', urlString);
+      fetchInfluencerSeaction(urlString);
+    });
+
+    async function fetchInfluencerSeaction(variantUrl) {
+      let response = await fetch(variantUrl);
+      if (!response.ok) throw new Error(response.status);
+
+      let text = await response.text();
+      let htmlMarkup = new DOMParser()
+        .parseFromString(text, 'text/html')
+        .querySelector('#shopify-section-product-influencer').innerHTML;
+
+      let influencerBlock = document.querySelector('#{{ uid }}');
+      influencerBlock.innerHTML = htmlMarkup;
+    }
+  </script>
+
+  <style>
+    #{{ uid }} {
+      width: 100%;
+      min-height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+{% endif %}
