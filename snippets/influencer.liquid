@@ -4,16 +4,6 @@
   {{ product.title }}
 </div>
 
-<style>
-  #{{ uid }} {
-    width: 100%;
-    min-height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
-
 <script defer>
   window.addEventListener("variant:change", () => {
     const url = new URL(window.location);
@@ -35,3 +25,13 @@
     influencerBlock.innerHTML = htmlMarkup
   }
 </script>
+
+<style>
+  #{{ uid }} {
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
