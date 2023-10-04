@@ -8,7 +8,10 @@
 {%- unless productHasInfluencer -%}
   {%- if request.design_mode -%}
     <div style="display: flex; min-height: 200px; justify-content: center; align-items: center; flex-direction: column; border: 1px dashed gray;">
-      <p>To use this section, please assign <strong>influencer_block metafield</strong> to atleast one variant of this product and then refresh this page.</p>
+      <p>
+        To use this section, please assign <strong>influencer_block metafield</strong> to atleast one variant of this
+        product and then refresh this page.
+      </p>
     </div>
   {%- endif -%}
 {%- endunless -%}
@@ -87,7 +90,7 @@
       left: 0;
       content: "\201C";
     }
-    
+
     #{{ uid }} blockquote cite small:before {
       content: "\2013";
     }
@@ -99,9 +102,13 @@
 
 {% schema %}
 {
-    "name": "Influencer Block",
-    "settings": [],
-    "presets": [
+  "name": "Influencer Block",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [],
+  "presets": [
     {
       "name": "Carousel",
       "blocks": []
