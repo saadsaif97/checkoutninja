@@ -906,7 +906,7 @@ class VariantSelects extends HTMLElement {
       this.updateShareUrl();
     }
     
-    window.dispatchEvent(new CustomEvent("variant:change"));
+    //window.dispatchEvent(new CustomEvent("variant:change"));
     
   }
 
