@@ -7,12 +7,12 @@
         "padding_bottom": 36
       }
     },
-    "form": {
-      "type": "contact-form",
+    "e93d54c5-752c-48f9-a0f7-9124e15baf26": {
+      "type": "contact-from-custom",
       "settings": {
-        "heading": "",
+        "heading": "Contact form Custom",
         "heading_size": "h1",
-        "color_scheme": "background-1",
+        "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -20,6 +20,6 @@
   },
   "order": [
     "main",
-    "form"
+    "e93d54c5-752c-48f9-a0f7-9124e15baf26"
   ]
 }
