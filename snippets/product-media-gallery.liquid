@@ -54,6 +54,7 @@
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
 >
+  {%- render 'product-label', product: product -%}
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
   <slider-component id="GalleryViewer-{{ section.id }}{{ id_append }}" class="slider-mobile-gutter">
     {%- unless is_duplicate -%}
@@ -308,3 +309,26 @@
     </slider-component>
   {%- endif -%}
 </media-gallery>
+
+<style>
+  media-gallery {
+    position: relative;
+  }
+  .product-labels {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 5px;
+  }
+  .product-label {
+    padding: 2px 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    width: fit-content;
+  }
+</style>
